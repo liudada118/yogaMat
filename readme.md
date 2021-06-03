@@ -1,0 +1,1 @@
+在react native 中调用 react native echarts 时候
