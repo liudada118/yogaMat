@@ -35,6 +35,7 @@ import Demo from './Demo'
 import EmailReg from './src/screen/registered/EmailReg'
 import Choose from './src/screen/home/Choose'
 import AddEquip from './src/screen/home/AddEquip'
+import Ech from './Ech'
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
@@ -125,6 +126,7 @@ function Appr(props) {
                         // <Choose />
                         :
                         <Stack.Navigator>
+                            {/* <Stack.Screen options={{ headerShown: false }} name="ech" component={Ech} /> */}
                             <Stack.Screen options={{ headerShown: false }} name="demo" component={Blue} />
                             <Stack.Screen options={{ headerShown: false }} name="newperpal" component={LoginR} />
                             <Stack.Screen options={{ headerShown: false }} name="login" component={Login} />

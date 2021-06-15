@@ -16,11 +16,14 @@ import {
   LayoutAnimation,
   ToastAndroid
 } from 'react-native';
-
+import Video from 'react-native-video';
 import BleManager from 'react-native-ble-manager';
+// import Video from 'react-native-video'; 
 import { WebView } from 'react-native-webview';
 const { height, scale } = Dimensions.get('window');
-
+let dataArr = []
+const color = 'rgb(80,80,80)'
+const promptColor = 'rgb(155,155,155)'
 /**
  * 适配宽度*/
 const myWidth = 300
@@ -53,7 +56,10 @@ export default class App extends React.Component {
       width5: 0,
       width6: 0,
       width7: 0,
-      text: ''
+      text: '',
+      video1End : false,
+      num1 : 0,
+      video1Info : false
     };
     this.l1 = React.createRef();
     this.l2 = React.createRef();
@@ -172,6 +178,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+   
     AppState.addEventListener('change', this.handleAppStateChange);
 
     BleManager.start({ showAlert: false });
@@ -283,7 +290,7 @@ export default class App extends React.Component {
         j++
       }
     }
-    console.log(valueArr, a)
+    // console.log(valueArr,)
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
     this.setState({
       width: valueArr[0] * (width - 20) / 1020,
@@ -295,129 +302,91 @@ export default class App extends React.Component {
       width6: valueArr[6] * (width - 20) / 1020,
       width7: valueArr[7] * (width - 20) / 1020,
     })
-    if (valueArr[6] > 100) {
-      this.setState({
-        text: 7
-      })
-    }
+
     // this.state.width = 
     // this.l1.current._internalFiberInstanceHandleDEV.memoizedProps.style.width=200
     // console.log(this.l1.current._internalFiberInstanceHandleDEV.memoizedProps.style.width)
     // this.l1.style = { backgroundColor: 'red', width: 100, height: 200 }
-    if (valueArr[0] > 130) {
-      this.l6.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
+    console.log(valueArr[2], dataArr)
+    if(this.l4.current){if (valueArr[2] > 130) {
+
+      if (dataArr[dataArr.length - 1] == 'l5') {
+        this.l4.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: 'rgb(249,214,248)'
+          }
+        })
+      }
+
+      if (dataArr[dataArr.length - 1] == 'l5') {
+        dataArr.push('l4')
+        this.setState({
+          num1 : parseInt(dataArr.length /2) ,
+        })
+      }
     }
-    if (valueArr[1] > 130) {
-      this.l4.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
-    }
-    if (valueArr[2] > 130) {
-      this.l5.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
-    }
-    if (valueArr[3] > 130) {
-      this.l3.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
-    }
-    if (valueArr[4] > 130) {
-      this.l2.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
-    }
-    if (valueArr[5] > 130) {
-      this.l1.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
-    }
-    if (valueArr[7] > 130) {
-      this.l8.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(249,214,248)'
-        }
-      })
+    else if (valueArr[3] > 130) {
+      
+      if (dataArr[dataArr.length - 1] == 'l4') {
+        console.log(111)
+        this.l5.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: 'rgb(249,214,248)'
+
+          }
+        })
+      }
+
+      if (dataArr[dataArr.length - 1] == 'l4' || dataArr.length == 0) {
+        dataArr.push('l5')
+        this.setState({
+          num1 : parseInt(dataArr.length /2) ,
+        })
+      }
     }
 
 
-    if (valueArr[0] < 130) {
-      this.l6.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
-    if (valueArr[1] < 130) {
-      this.l4.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
+
     if (valueArr[2] < 130) {
-      this.l5.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
+      if (dataArr[dataArr.length - 1] == 'l5') {
+        this.l4.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: promptColor
+          }
+        })
+      }
+      if (dataArr[dataArr.length - 1] == 'l4') {
+        this.l4.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: color
+          }
+        })
+      }
+
     }
     if (valueArr[3] < 130) {
-      this.l3.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
-    if (valueArr[4] < 130) {
-      this.l2.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
-    if (valueArr[5] < 130) {
-      this.l1.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
-    if (valueArr[7] < 130) {
-      this.l8.setNativeProps({
-        style: {
-          opacity: 1,
-          backgroundColor: 'rgb(36,4,49)'
-        }
-      })
-    }
+      if (dataArr[dataArr.length - 1] == 'l5') {
+        this.l5.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: color
+          }
+        })
+      }
+      if (dataArr[dataArr.length - 1] == 'l4') {
+        this.l5.setNativeProps({
+          style: {
+            opacity: 1,
+            backgroundColor: promptColor
+          }
+        })
+      }
+    }}
+
 
     // this.l6.setNativeProps({
     //   style: {
@@ -573,10 +542,7 @@ export default class App extends React.Component {
 
     return (
       <View style={styles.container}>
-        {/* <WebView
-          source={{ uri: 'https://github.com/facebook/react-native' }}
-          style={{ marginTop: 20 }}
-        /> */}
+
         <TouchableHighlight
           style={{
             marginTop: 40,
@@ -588,32 +554,79 @@ export default class App extends React.Component {
           <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
 
         </TouchableHighlight>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: Width(240), height: Width(540) > height * 0.8 ? 0.8 * height : Width(540), borderWidth: 1, borderColor: '#f9d6f8' }}>
-            <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>7</Text>
-            </View>
-            <View style={{ flex: 2, borderBottomWidth: 1, borderColor: '#f9d6f8', position: 'relative' }}>
-              <View ref={(e) => this.l3 = e} style={{ position: 'absolute', top: '50%', backgroundColor: 'rgb(36,4,49)', left: '50%', zIndex: 2, width: Width(120), height: Width(120), transform: [{ translateY: -Width(60) }, { translateX: -Width(60) }, { rotateZ: '45deg' }], borderWidth: 1, borderColor: '#f9d6f8', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30), transform: [{ rotateZ: '-45deg' }] }}>4</Text>
+        {this.state.video1Info ? !this.state.video1End ? 
+        <View style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
+      }}>
+          
+          {<Video source={require('./src/assets/video/video1.mp4')}   // Can be a URL or a local file.
+            ref={(ref) => {
+              this.player = ref
+            }}                                      // Store reference
+            onBuffer={this.onBuffer}                // Callback when remote video is buffering
+            onError={this.videoError}
+            onLoadStart={() => {
+              this.l5.setNativeProps({
+                style: {
+                  opacity: 1,
+                  backgroundColor: promptColor
+                }
+              })
+            }} 
+            onEnd={()=>{
+              this.setState({
+                video1End : true
+              })
+            }}              // Callback when video cannot be loaded
+            // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
+            style={{ flex: 1}}
+            />}
+          <Text style={{position: 'absolute',top: 50, color : 'white'}}>{this.state.num1}/16</Text>
+          <View style={{ position: 'absolute', top: 150, left: 400,// transform: [{ rotateZ: '90deg' }], 
+          alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: Width(48), height: Width(108) > height * 0.8 ? 0.8 * height : Width(108), borderWidth: 1, borderColor: '#f9d6f8' }}>
+              <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
               </View>
-              <View style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row' }}>
-                <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l1 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>6</Text></View>
-                <View style={{ flex: 1, backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l2 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>5</Text></View>
+              <View style={{ flex: 2, borderBottomWidth: 1, borderColor: '#f9d6f8', position: 'relative' }}>
+                <View ref={(e) => this.l3 = e} style={{ position: 'absolute', top: '50%', backgroundColor: color, left: '50%', zIndex: 2, width: Width(24), height: Width(24), transform: [{ translateY: -Width(12) }, { translateX: -Width(12) }, { rotateZ: '45deg' }], borderWidth: 1, borderColor: '#f9d6f8', justifyContent: 'center', alignItems: 'center' }}>
+                  <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30), transform: [{ rotateZ: '-45deg' }] }}></Text>
+                </View>
+                <View style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row' }}>
+                  <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l1 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                  <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l2 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                </View>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l4 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                  <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l5 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                </View>
               </View>
               <View style={{ flex: 1, flexDirection: 'row' }}>
-                <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l4 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>2</Text></View>
-                <View style={{ flex: 1, backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l5 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>3</Text></View>
+                <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l6 = e}>
+                  <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
+                </View>
               </View>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-              <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l6 = e}>
-                <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}>1</Text>
-              </View>
-              {/* <View style={{ flex: 1,backgroundColor : 'rgb(36,4,49)' }} ref={(e) => this.l7 = e}></View> */}
             </View>
           </View>
-        </View>
+
+
+        </View> : <Text>前后小跳 : {parseInt(dataArr.length/2)}</Text> : <Video source={require('./src/assets/video/video1info.mp4')}   // Can be a URL or a local file.
+            ref={(ref) => {
+              this.player = ref
+            }}                                      // Store reference
+            onBuffer={this.onBuffer}                // Callback when remote video is buffering
+            onError={this.videoError} 
+            onEnd={()=>{
+              this.setState({
+                video1Info : true
+              })
+              
+            }}              // Callback when video cannot be loaded
+            style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
+          }}  />}
+
+
+
+
       </View>
     );
   }
