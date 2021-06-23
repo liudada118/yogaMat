@@ -21,11 +21,26 @@ import BleManager from 'react-native-ble-manager';
 // import Video from 'react-native-video'; 
 import { WebView } from 'react-native-webview';
 import Ech from './Ech'
+import { com } from './com'
+// import video1 from './src/assets/video/video1.mp4'
+// import video1Info from './src/assets/video/video1info.mp4'
+// import video2 from './src/assets/video/video2.mp4'
+// import video2Info from './src/assets/video/video2info.mp4'
+// import video3 from './src/assets/video/video3.mp4'
+// import video3Info from './src/assets/video/video3info.mp4'
+// import video4 from './src/assets/video/video4.mp4'
+// import video4Info from './src/assets/video/video4info.mp4'
 const { height, scale } = Dimensions.get('window');
 let dataArr = []
 let dataArr1 = []
 let dataArr2 = []
 let dataArr3 = []
+let leftArr1 = []
+let leftArr2 = []
+let rightArr1 = []
+let rightArr2 = []
+let flag = 1
+
 const comValue = 130
 const top = 200
 const left = 450
@@ -68,7 +83,7 @@ export default class App extends React.Component {
       video1End: false,
       num1: 0,
       video1Info: false,
-      step: 9,
+      step: 1,
       num2: 0,
       num3: 0,
       num4: 0
@@ -191,13 +206,7 @@ export default class App extends React.Component {
 
   componentDidMount() {
 
-    if(this.state.step ==9){
-      setTimeout(()=>{
-        this.setState({
-          step : 10
-        })
-      },2000)
-    }
+
 
 
 
@@ -312,24 +321,24 @@ export default class App extends React.Component {
         j++
       }
     }
-    // console.log(valueArr,)
+    console.log(valueArr,)
     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear);
-    this.setState({
-      width: valueArr[0] * (width - 20) / 1020,
-      width1: valueArr[1] * (width - 20) / 1020,
-      width2: valueArr[2] * (width - 20) / 1020,
-      width3: valueArr[3] * (width - 20) / 1020,
-      width4: valueArr[4] * (width - 20) / 1020,
-      width5: valueArr[5] * (width - 20) / 1020,
-      width6: valueArr[6] * (width - 20) / 1020,
-      width7: valueArr[7] * (width - 20) / 1020,
-    })
+    // this.setState({
+    //   width: valueArr[0] * (width - 20) / 1020,
+    //   width1: valueArr[1] * (width - 20) / 1020,
+    //   width2: valueArr[2] * (width - 20) / 1020,
+    //   width3: valueArr[3] * (width - 20) / 1020,
+    //   width4: valueArr[4] * (width - 20) / 1020,
+    //   width5: valueArr[5] * (width - 20) / 1020,
+    //   width6: valueArr[6] * (width - 20) / 1020,
+    //   width7: valueArr[7] * (width - 20) / 1020,
+    // })
 
     // this.state.width = 
     // this.l1.current._internalFiberInstanceHandleDEV.memoizedProps.style.width=200
     // console.log(this.l1.current._internalFiberInstanceHandleDEV.memoizedProps.style.width)
     // this.l1.style = { backgroundColor: 'red', width: 100, height: 200 }
-    console.log(valueArr)
+    // console.log(valueArr)
     if (this.state.step == 2) {
       if (valueArr[2] > comValue) {
 
@@ -344,14 +353,15 @@ export default class App extends React.Component {
 
         if (dataArr[dataArr.length - 1] == 'l5') {
           dataArr.push('l4')
+
           this.setState({
-            num1: parseInt(dataArr.length / 2),
+            num1: dataArr.length,
           })
         }
       }
       else if (valueArr[3] > comValue) {
 
-        if (dataArr[dataArr.length - 1] == 'l4') {
+        if (dataArr[dataArr.length - 1] == 'l4' || dataArr.length == 0) {
           console.log(111)
           this.l5.setNativeProps({
             style: {
@@ -429,10 +439,13 @@ export default class App extends React.Component {
           }
         })
         dataArr1.push('two')
+        leftArr1.push(valueArr[2])
+        rightArr1.push(valueArr[3])
         this.setState({
           num2: parseInt(dataArr1.length / 2)
         })
       } else if ((valueArr[2] > comValue && valueArr[3] < comValue) && ((dataArr1.length == 1 || dataArr1[dataArr1.length - 2] == 'l5') && dataArr1[dataArr1.length - 1] == 'two')) {
+        leftArr1.push(valueArr[2])
         this.l4.setNativeProps({
           style: {
             opacity: 1,
@@ -444,6 +457,7 @@ export default class App extends React.Component {
           num2: parseInt(dataArr1.length / 2)
         })
       } else if ((valueArr[3] > comValue && valueArr[2] < comValue) && ((dataArr1.length == 1 || dataArr1[dataArr1.length - 2] == 'l4') && dataArr1[dataArr1.length - 1] == 'two')) {
+        rightArr1.push(valueArr[3])
         this.l5.setNativeProps({
           style: {
             opacity: 1,
@@ -517,7 +531,10 @@ export default class App extends React.Component {
           }
         })
         dataArr2.push('two')
+        leftArr2.push(valueArr[2])
+        rightArr2.push(valueArr[3])
       } else if (valueArr[2] > comValue && valueArr[3] < comValue && dataArr2[dataArr2.length - 1] == 'two') {
+        leftArr2.push(valueArr[2])
         this.l4.setNativeProps({
           style: {
             opacity: 1,
@@ -526,7 +543,7 @@ export default class App extends React.Component {
         })
         dataArr2.push('l5')
         this.setState({
-          num3: dataArr2.length
+          num3: parseInt(dataArr2.length / 2)
         })
       }
 
@@ -584,7 +601,7 @@ export default class App extends React.Component {
         })
         dataArr3.push('l3')
         this.setState({
-          num4: dataArr3.length
+          num4: parseInt(dataArr3.length / 2)
         })
       }
 
@@ -640,6 +657,19 @@ export default class App extends React.Component {
             }
           })
         }
+      }
+
+    }
+
+    if (this.state.step == 9) {
+      flag++
+      console.log(flag)
+      if (flag == 2) {
+        setTimeout(() => {
+          this.setState({
+            step: 10
+          })
+        }, 2000)
       }
 
     }
@@ -755,89 +785,26 @@ export default class App extends React.Component {
     //const list = Array.from(this.state.peripherals.values());
 
     return (
+
       <View style={styles.container}>
+        <ScrollView style={{ flex: 1 }}>
+          <TouchableHighlight
+            style={{
+              marginTop: 40,
+              margin: 20,
+              padding: 20,
+              backgroundColor: '#ccc',
+            }}
+            onPress={() => this.startScan()}>
+            <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
 
-        <TouchableHighlight
-          style={{
-            marginTop: 40,
-            margin: 20,
-            padding: 20,
-            backgroundColor: '#ccc',
-          }}
-          onPress={() => this.startScan()}>
-          <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
-
-        </TouchableHighlight>
-        <View style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}>
+          </TouchableHighlight>
+          <View style={{ width: width, height: height, }}>
+            <View style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}>
 
 
-          {
-            this.state.step == 1 ? <Video source={require('./src/assets/video/video1info.mp4')}   // Can be a URL or a local file.
-              ref={(ref) => {
-                this.player = ref
-              }}                                      // Store reference
-              onBuffer={this.onBuffer}                // Callback when remote video is buffering
-              onError={this.videoError}
-              onEnd={() => {
-                this.setState({
-                  step: 2
-                })
-
-              }}              // Callback when video cannot be loaded
-              style={{
-                flex: 1 //width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
-              }} /> : this.state.step == 2 ? <>
-                <Video source={require('./src/assets/video/video1.mp4')}   // Can be a URL or a local file.
-                  ref={(ref) => {
-                    this.player = ref
-                  }}                                      // Store reference
-                  onBuffer={this.onBuffer}                // Callback when remote video is buffering
-                  onError={this.videoError}
-                  onLoadStart={() => {
-                    this.l5.setNativeProps({
-                      style: {
-                        opacity: 1,
-                        backgroundColor: promptColor
-                      }
-                    })
-                  }}
-                  onEnd={() => {
-                    this.setState({
-                      step: 3
-                    })
-                  }}              // Callback when video cannot be loaded
-                  // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
-                  style={{ flex: 1 }}
-                />
-                <Text style={{ position: 'absolute', top: 50, color: 'white' ,fontSize : 24}}>{this.state.num1}/16</Text>
-                <View style={{
-                  position: 'absolute', top, left,// transform: [{ rotateZ: '90deg' }], 
-                  alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <View style={{ width: Width(48), height: Width(108) > height * 0.8 ? 0.8 * height : Width(108), borderWidth: 1, borderColor: '#f9d6f8' }}>
-                    <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
-                    </View>
-                    <View style={{ flex: 2, borderBottomWidth: 1, borderColor: '#f9d6f8', position: 'relative' }}>
-                      <View ref={(e) => this.l3 = e} style={{ position: 'absolute', top: '50%', backgroundColor: color, left: '50%', zIndex: 2, width: Width(24), height: Width(24), transform: [{ translateY: -Width(12) }, { translateX: -Width(12) }, { rotateZ: '45deg' }], borderWidth: 1, borderColor: '#f9d6f8', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30), transform: [{ rotateZ: '-45deg' }] }}></Text>
-                      </View>
-                      <View style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row' }}>
-                        <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l1 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
-                        <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l2 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
-                      </View>
-                      <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l4 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
-                        <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l5 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
-                      </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                      <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l6 = e}>
-                        <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
-                      </View>
-                    </View>
-                  </View>
-                </View></> : this.state.step == 3 ? <Video source={require('./src/assets/video/video2info.mp4')}   // Can be a URL or a local file.
+              {
+                this.state.step == 1 ? <Video source={require('./src/assets/video/video1info.mp4')}   // Can be a URL or a local file.
                   ref={(ref) => {
                     this.player = ref
                   }}                                      // Store reference
@@ -845,42 +812,36 @@ export default class App extends React.Component {
                   onError={this.videoError}
                   onEnd={() => {
                     this.setState({
-                      step: 4
+                      step: 2
                     })
 
                   }}              // Callback when video cannot be loaded
                   style={{
                     flex: 1 //width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
-                  }} /> : this.state.step == 4 ? <>
-                    <Video source={require('./src/assets/video/video2.mp4')}   // Can be a URL or a local file.
+                  }} /> : this.state.step == 2 ? <>
+                    <Video source={require('./src/assets/video/video1.mp4')}   // Can be a URL or a local file.
                       ref={(ref) => {
                         this.player = ref
                       }}                                      // Store reference
                       onBuffer={this.onBuffer}                // Callback when remote video is buffering
                       onError={this.videoError}
-                      // onLoadStart={() => {
-                      //   this.l5.setNativeProps({
-                      //     style: {
-                      //       opacity: 1,
-                      //       backgroundColor: promptColor
-                      //     }
-                      //   })
-                      //   this.l4.setNativeProps({
-                      //     style: {
-                      //       opacity: 1,
-                      //       backgroundColor: promptColor
-                      //     }
-                      //   })
-                      // }}
+                      onLoadStart={() => {
+                        this.l5.setNativeProps({
+                          style: {
+                            opacity: 1,
+                            backgroundColor: promptColor
+                          }
+                        })
+                      }}
                       onEnd={() => {
                         this.setState({
-                          step: 5,
+                          step: 3
                         })
                       }}              // Callback when video cannot be loaded
                       // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
                       style={{ flex: 1 }}
                     />
-                    <Text style={{ position: 'absolute', top: 50, color: 'white',fontSize : 24 }}>{this.state.num2}/16</Text>
+                    <Text style={{ position: 'absolute', top: 50, color: 'white', fontSize: 24 }}>{this.state.num1}/16</Text>
                     <View style={{
                       position: 'absolute', top, left,// transform: [{ rotateZ: '90deg' }], 
                       alignItems: 'center', justifyContent: 'center'
@@ -908,7 +869,7 @@ export default class App extends React.Component {
                           </View>
                         </View>
                       </View>
-                    </View></> : this.state.step == 5 ? <Video source={require('./src/assets/video/video3info.mp4')}   // Can be a URL or a local file.
+                    </View></> : this.state.step == 3 ? <Video source={require('./src/assets/video/video2info.mp4')}   // Can be a URL or a local file.
                       ref={(ref) => {
                         this.player = ref
                       }}                                      // Store reference
@@ -916,42 +877,42 @@ export default class App extends React.Component {
                       onError={this.videoError}
                       onEnd={() => {
                         this.setState({
-                          step: 6
+                          step: 4
                         })
 
                       }}              // Callback when video cannot be loaded
                       style={{
                         flex: 1 //width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
-                      }} /> : this.state.step == 6 ? <>
-                        <Video source={require('./src/assets/video/video3.mp4')}   // Can be a URL or a local file.
+                      }} /> : this.state.step == 4 ? <>
+                        <Video source={require('./src/assets/video/video2.mp4')}   // Can be a URL or a local file.
                           ref={(ref) => {
                             this.player = ref
                           }}                                      // Store reference
                           onBuffer={this.onBuffer}                // Callback when remote video is buffering
                           onError={this.videoError}
-                          onLoadStart={() => {
-                            this.l5.setNativeProps({
-                              style: {
-                                opacity: 1,
-                                backgroundColor: promptColor
-                              }
-                            })
-                            this.l4.setNativeProps({
-                              style: {
-                                opacity: 1,
-                                backgroundColor: promptColor
-                              }
-                            })
-                          }}
+                          // onLoadStart={() => {
+                          //   this.l5.setNativeProps({
+                          //     style: {
+                          //       opacity: 1,
+                          //       backgroundColor: promptColor
+                          //     }
+                          //   })
+                          //   this.l4.setNativeProps({
+                          //     style: {
+                          //       opacity: 1,
+                          //       backgroundColor: promptColor
+                          //     }
+                          //   })
+                          // }}
                           onEnd={() => {
                             this.setState({
-                              step: 7
+                              step: 5,
                             })
                           }}              // Callback when video cannot be loaded
                           // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
                           style={{ flex: 1 }}
                         />
-                        <Text style={{ position: 'absolute', top: 50, color: 'white',fontSize : 24 }}>{this.state.num3}/16</Text>
+                        <Text style={{ position: 'absolute', top: 50, color: 'white', fontSize: 24 }}>{this.state.num2}/16</Text>
                         <View style={{
                           position: 'absolute', top, left,// transform: [{ rotateZ: '90deg' }], 
                           alignItems: 'center', justifyContent: 'center'
@@ -979,7 +940,7 @@ export default class App extends React.Component {
                               </View>
                             </View>
                           </View>
-                        </View></> : this.state.step == 7 ? <Video source={require('./src/assets/video/video4info.mp4')}   // Can be a URL or a local file.
+                        </View></> : this.state.step == 5 ? <Video source={require('./src/assets/video/video3info.mp4')}   // Can be a URL or a local file.
                           ref={(ref) => {
                             this.player = ref
                           }}                                      // Store reference
@@ -987,14 +948,14 @@ export default class App extends React.Component {
                           onError={this.videoError}
                           onEnd={() => {
                             this.setState({
-                              step: 8
+                              step: 6
                             })
 
                           }}              // Callback when video cannot be loaded
                           style={{
                             flex: 1 //width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
-                          }} /> : this.state.step == 8 ? <>
-                            <Video source={require('./src/assets/video/video4.mp4')}   // Can be a URL or a local file.
+                          }} /> : this.state.step == 6 ? <>
+                            <Video source={require('./src/assets/video/video3.mp4')}   // Can be a URL or a local file.
                               ref={(ref) => {
                                 this.player = ref
                               }}                                      // Store reference
@@ -1016,13 +977,13 @@ export default class App extends React.Component {
                               }}
                               onEnd={() => {
                                 this.setState({
-                                  step  : 9
+                                  step: 7
                                 })
                               }}              // Callback when video cannot be loaded
                               // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
                               style={{ flex: 1 }}
                             />
-                            <Text style={{ position: 'absolute', top: 50, color: 'white',fontSize : 24 }}>{this.state.num4}/16</Text>
+                            <Text style={{ position: 'absolute', top: 50, color: 'white', fontSize: 24 }}>{this.state.num3}/16</Text>
                             <View style={{
                               position: 'absolute', top, left,// transform: [{ rotateZ: '90deg' }], 
                               alignItems: 'center', justifyContent: 'center'
@@ -1050,19 +1011,93 @@ export default class App extends React.Component {
                                   </View>
                                 </View>
                               </View>
-                            </View></> : this.state.step == 9 ? <View style={{flex : 1 , justifyContent : 'center' , alignItems : 'center'}}>
-                              <Text>左右小跳 : {this.state.num1}</Text>
-                              <Text>半蹲侧抬腿 : {this.state.num2}</Text>
-                              <Text>右提膝收腹 : {this.state.num3}</Text>
-                              <Text>开合跳 : {this.state.num4}</Text>
-                            </View> : <View style={{flex : 1 , justifyContent : 'center' , alignItems : 'center'}}><Ech /></View>
-          }
-        </View>
+                            </View></> : this.state.step == 7 ? <Video source={require('./src/assets/video/video4info.mp4')}   // Can be a URL or a local file.
+                              ref={(ref) => {
+                                this.player = ref
+                              }}                                      // Store reference
+                              onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                              onError={this.videoError}
+                              onEnd={() => {
+                                this.setState({
+                                  step: 8
+                                })
+
+                              }}              // Callback when video cannot be loaded
+                              style={{
+                                flex: 1 //width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
+                              }} /> : this.state.step == 8 ? <>
+                                <Video source={require('./src/assets/video/video4.mp4')}   // Can be a URL or a local file.
+                                  ref={(ref) => {
+                                    this.player = ref
+                                  }}                                      // Store reference
+                                  onBuffer={this.onBuffer}                // Callback when remote video is buffering
+                                  onError={this.videoError}
+                                  onLoadStart={() => {
+                                    this.l5.setNativeProps({
+                                      style: {
+                                        opacity: 1,
+                                        backgroundColor: promptColor
+                                      }
+                                    })
+                                    this.l4.setNativeProps({
+                                      style: {
+                                        opacity: 1,
+                                        backgroundColor: promptColor
+                                      }
+                                    })
+                                  }}
+                                  onEnd={() => {
+                                    this.setState({
+                                      step: 9
+                                    })
+                                  }}              // Callback when video cannot be loaded
+                                  // style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] }}  
+                                  style={{ flex: 1 }}
+                                />
+                                <Text style={{ position: 'absolute', top: 50, color: 'white', fontSize: 24 }}>{this.state.num4}/16</Text>
+                                <View style={{
+                                  position: 'absolute', top, left,// transform: [{ rotateZ: '90deg' }], 
+                                  alignItems: 'center', justifyContent: 'center'
+                                }}>
+                                  <View style={{ width: Width(48), height: Width(108) > height * 0.8 ? 0.8 * height : Width(108), borderWidth: 1, borderColor: '#f9d6f8' }}>
+                                    <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }}>
+                                      <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
+                                    </View>
+                                    <View style={{ flex: 2, borderBottomWidth: 1, borderColor: '#f9d6f8', position: 'relative' }}>
+                                      <View ref={(e) => this.l3 = e} style={{ position: 'absolute', top: '50%', backgroundColor: color, left: '50%', zIndex: 2, width: Width(24), height: Width(24), transform: [{ translateY: -Width(12) }, { translateX: -Width(12) }, { rotateZ: '45deg' }], borderWidth: 1, borderColor: '#f9d6f8', justifyContent: 'center', alignItems: 'center' }}>
+                                        <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30), transform: [{ rotateZ: '-45deg' }] }}></Text>
+                                      </View>
+                                      <View style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row' }}>
+                                        <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l1 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                                        <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l2 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                                      </View>
+                                      <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l4 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                                        <View style={{ flex: 1, backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l5 = e}><Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text></View>
+                                      </View>
+                                    </View>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                      <View style={{ flex: 1, borderRightWidth: 1, borderColor: '#f9d6f8', backgroundColor: color, justifyContent: 'center', alignItems: 'center' }} ref={(e) => this.l6 = e}>
+                                        <Text style={{ color: 'rgb(36,4,49)', fontSize: Width(30) }}></Text>
+                                      </View>
+                                    </View>
+                                  </View>
+                                </View></> : this.state.step == 9 ? <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                  <Text>左右小跳 : {this.state.num1}</Text>
+                                  <Text>半蹲侧抬腿 : {this.state.num2}</Text>
+                                  <Text>右提膝收腹 : {this.state.num3}</Text>
+                                  <Text>开合跳 : {this.state.num4}</Text>
+                                </View> : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                  <Ech muscle={com.muscle([leftArr1, leftArr2, rightArr1, rightArr2])} flex={com.flex([this.state.num1, this.state.num2, this.state.num3, this.state.num4])} skill={com.skill([this.state.num1, this.state.num2, this.state.num3, this.state.num4])}
+                    endur={com.endur()} Concen={com.Concen()} />
+                </View>
+              }
+            </View>
 
 
 
 
-        {/* {this.state.video1Info ? !this.state.video1End ? 
+            {/* {this.state.video1Info ? !this.state.video1End ? 
         <View style={{ width: height * 0.9, height: width, resizeMode: 'stretch', transform: [{ rotateZ: '90deg' }, { translateY: width / 2 - 40 }, { translateX: 140 }] 
       }}>
           
@@ -1133,15 +1168,16 @@ export default class App extends React.Component {
           }}  />} */}
 
 
-
-
+          </View>
+        </ScrollView>
       </View>
+
     );
   }
 }
 
 const styles = StyleSheet.create({
-  text : {fontSize : 24},
+  text: { fontSize: 24 },
   container: {
     flex: 1,
     backgroundColor: '#FFF',
