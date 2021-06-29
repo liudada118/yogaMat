@@ -49,6 +49,7 @@ let relArr1 = []
 let relArr2 = []
 let relArr3 = []
 let relArr4 = []
+let diffArr = []
 let stable = []
 const width = Dimensions.get('window').width;
 const window = Dimensions.get('window');
@@ -82,7 +83,8 @@ export default class App extends React.Component {
       option1: '',
       option2: '',
       option3: '',
-      arr: ''
+      arr: '',
+      trueValue : ''
     };
     this.l1 = React.createRef();
     this.l2 = React.createRef();
@@ -370,10 +372,13 @@ export default class App extends React.Component {
     }
     if (valueArr[4] > 130) {
 
-      if (dataArr.length < 30) {
-        comnum++
+      if (dataArr.length < 2) {
+        
+        
         dataArr.push(valueArr[4])
-        smooth = smooth + (com(dataArr) - smooth) / 10
+        if(dataArr.length ==2){
+        smooth = smooth + (Math.abs(dataArr[1]-dataArr[0])  - smooth) / 30 
+        diffArr.push(smooth)}
         // console.log(smooth,com(dataArr))
         let fillArr = firFilter.simulate(dataArr)
         relArr1.push(valueArr[4])
@@ -384,58 +389,66 @@ export default class App extends React.Component {
         let relvalue = relArr.reduce((prev, cur) => parseInt(prev) + parseInt(cur), 0)
         relArr4.push(relvalue / relArr.length)
         console.log(relArr1)
-        if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 10) {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-        } else if (relvalue / relArr.length < 250) {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-        } else {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-        }
+        // if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 10) {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 1
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        // } else if (relvalue / relArr.length < 250) {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 0
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 1
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        // } else {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 0
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 1
+        //   //   }
+        //   // })
+        // }
+        this.slide.setNativeProps({
+              style: {
+                left : `${(smooth-1)*20 > 90 ? 90   : (smooth-1)*20 < 0 ? 0 :  (smooth-1)*20}%`
+              }
+            })
+
+        
         // console.log(fillArr)
         this.setState({
-          aver: relvalue / relArr.length
+          aver: smooth,
+         
         })
 
 
@@ -461,7 +474,7 @@ export default class App extends React.Component {
           }, arr: relArr,
           option1: {
             title: {
-              text: '原始'
+              text: 'diffArr'
             },
             tooltip: {},
             legend: {
@@ -474,7 +487,7 @@ export default class App extends React.Component {
             series: [{
               name: '销量',
               type: 'bar',
-              data: relArr1
+              data: diffArr
             }]
           },
           option2: {
@@ -519,10 +532,13 @@ export default class App extends React.Component {
 
 
       } else {
+        
         comnum++
         dataArr.shift()
         dataArr.push(valueArr[4])
-        smooth = smooth + (com(dataArr) - smooth) / 10
+       
+        smooth = smooth + (Math.abs(dataArr[1]-dataArr[0]) - smooth) / 30
+        diffArr.push(smooth)
         // console.log(smooth,com(dataArr))
         let fillArr = firFilter.simulate(dataArr)
 
@@ -536,58 +552,64 @@ export default class App extends React.Component {
         let relvalue = relArr.reduce((prev, cur) => parseInt(prev) + parseInt(cur), 0)
         relArr4.push(relvalue / relArr.length)
         console.log(relArr1)
-        if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 4) {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-        } else if (relvalue / relArr.length < 250) {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-        } else {
-          this.slide.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide1.setNativeProps({
-            style: {
-              opacity : 0
-            }
-          })
-          this.slide2.setNativeProps({
-            style: {
-              opacity : 1
-            }
-          })
-        }
+        // if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 4) {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 1
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        // } else if (relvalue / relArr.length < 250) {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 0
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 1
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        // } else {
+        //   this.slide.setNativeProps({
+        //     style: {
+        //       opacity : 0
+        //     }
+        //   })
+        //   // this.slide1.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 0
+        //   //   }
+        //   // })
+        //   // this.slide2.setNativeProps({
+        //   //   style: {
+        //   //     opacity : 1
+        //   //   }
+        //   // })
+        // }
+        this.slide.setNativeProps({
+          style: {
+            left : `${(smooth-1)*20 > 90 ? 90   : (smooth-1)*20 < 0 ? 0 :  (smooth-1)*20}%`
+          }
+        })
         // console.log(fillArr)
         this.setState({
-          aver: relvalue / relArr.length
+          aver: smooth,
+          trueValue : Math.abs(dataArr[1]-dataArr[0])
         })
         // relArr.push(Number( com(dataArr).toFixed(0)))
         //Number( com(fillArr).toFixed(0)))
@@ -615,7 +637,7 @@ export default class App extends React.Component {
           arr: relArr,
           option1: {
             title: {
-              text: '原始'
+              text: 'diffArr'
             },
             tooltip: {},
             legend: {
@@ -628,7 +650,7 @@ export default class App extends React.Component {
             series: [{
               name: '销量',
               type: 'bar',
-              data: relArr1
+              data: diffArr
             }]
           },
           option2: {
@@ -987,16 +1009,18 @@ export default class App extends React.Component {
           </TouchableHighlight>
           {/* <> */}
           <View style={{ width: '100%', backgroundColor: '#ccc', height: 30, borderRadius: 15, position: 'relative',flexDirection : 'row' }}>
-            <View ref={(e) => this.slide = e} style={{ width: '33%', backgroundColor: 'green', height: 30, borderBottomLeftRadius: 15,borderTopLeftRadius : 15,  }}></View>
-            <View ref={(e) => this.slide1 = e} style={{ width: '34%', backgroundColor: '#f15929', height: 30  }}></View>
-            <View ref={(e) => this.slide2 = e} style={{ width: '33%', backgroundColor: 'red', height: 30, borderBottomRightRadius: 15, borderTopRightRadius : 15,  }}></View>
+            <View ref={(e) => this.slide = e} style={{ width: '10%', backgroundColor: 'green', height: 30, borderRadius: 15,position:'absolute',//left:'30%'
+            //borderBottomLeftRadius: 15,borderTopLeftRadius : 15, 
+             }}></View>
+            {/* <View ref={(e) => this.slide1 = e} style={{ width: '34%', backgroundColor: '#f15929', height: 30  }}></View>
+            <View ref={(e) => this.slide2 = e} style={{ width: '33%', backgroundColor: 'red', height: 30, borderBottomRightRadius: 15, borderTopRightRadius : 15,  }}></View> */}
           </View>
-          < AppView option={this.state.option} arr={[this.state.arr]} />
-          {/* < AppView option={this.state.option1} arr={[this.state.arr]} /> */}
+          {/* < AppView option={this.state.option} arr={[this.state.arr]} /> */}
+          < AppView option={this.state.option1} arr={[this.state.arr]} />
           {/* < AppView option={this.state.option2} arr={[this.state.arr]} />   */}
           {/* lubo */}
-          < AppView option={this.state.option3} arr={[this.state.arr]} />
-          <Text style={{ textAlign: 'center', width: '100%' }}>{parseInt(this.state.aver)}</Text>
+          {/* < AppView option={this.state.option3} arr={[this.state.arr]} /> */}
+          <Text style={{ textAlign: 'center', width: '100%' }}>{parseInt(this.state.aver )},{parseInt(this.state.trueValue )}</Text>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', opacity: 0 }}>
             <View style={{ width: Width(240), height: Width(540) > height * 0.8 ? 0.8 * height : Width(540), borderWidth: 1, borderColor: '#f9d6f8' }}>
               <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }}>
