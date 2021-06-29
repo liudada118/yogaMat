@@ -1,7 +1,7 @@
 export function com(Arr){
     let arr = []
     Arr.forEach((a,index) => {
-        if(index >=15){
+        if(index >=20){
             arr.push(a)
         }
     })

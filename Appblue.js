@@ -92,6 +92,9 @@ export default class App extends React.Component {
     this.l6 = React.createRef();
     this.l7 = React.createRef();
     this.l8 = React.createRef();
+    this.slide = React.createRef();
+    this.slide1 = React.createRef();
+    this.slide2 = React.createRef();
     this.handleDiscoverPeripheral = this.handleDiscoverPeripheral.bind(this);
     this.handleStopScan = this.handleStopScan.bind(this);
     this.handleUpdateValueForCharacteristic = this.handleUpdateValueForCharacteristic.bind(
@@ -367,23 +370,72 @@ export default class App extends React.Component {
     }
     if (valueArr[4] > 130) {
 
-      if (dataArr.length < 50) {
+      if (dataArr.length < 30) {
         comnum++
         dataArr.push(valueArr[4])
         smooth = smooth + (com(dataArr) - smooth) / 10
         // console.log(smooth,com(dataArr))
         let fillArr = firFilter.simulate(dataArr)
         relArr1.push(valueArr[4])
-        console.log(relArr1)
         relArr2.push(fillArr)
         relArr3.push(com(dataArr).toFixed(0))
         // relArr4.push(relArr3)
         relArr.push(com(fillArr).toFixed(0))//Number( com(fillArr).toFixed(0)))
-        let relvalue = relArr.reduce((prev ,cur) => parseInt(prev)  + parseInt(cur) , 0)
+        let relvalue = relArr.reduce((prev, cur) => parseInt(prev) + parseInt(cur), 0)
         relArr4.push(relvalue / relArr.length)
+        console.log(relArr1)
+        if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 10) {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+        } else if (relvalue / relArr.length < 250) {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+        } else {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+        }
         // console.log(fillArr)
         this.setState({
-          aver: com(fillArr).toFixed(0)
+          aver: relvalue / relArr.length
         })
 
 
@@ -473,18 +525,69 @@ export default class App extends React.Component {
         smooth = smooth + (com(dataArr) - smooth) / 10
         // console.log(smooth,com(dataArr))
         let fillArr = firFilter.simulate(dataArr)
-        
+
         relArr1.push(valueArr[4])
-        console.log(relArr1)
+       
         let fillArr1 = firFilter.simulate(relArr1)
-        relArr2=fillArr1
+        relArr2 = fillArr1
         relArr3.push(com(dataArr).toFixed(0))
+        relArr.shift()
         relArr.push(com(fillArr).toFixed(0))
-        let relvalue = relArr.reduce((prev ,cur) =>parseInt(prev)  + parseInt(cur)  , 0)
+        let relvalue = relArr.reduce((prev, cur) => parseInt(prev) + parseInt(cur), 0)
         relArr4.push(relvalue / relArr.length)
+        console.log(relArr1)
+        if (relvalue / relArr.length >= 0 && relvalue / relArr.length < 4) {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+        } else if (relvalue / relArr.length < 250) {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+        } else {
+          this.slide.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide1.setNativeProps({
+            style: {
+              opacity : 0
+            }
+          })
+          this.slide2.setNativeProps({
+            style: {
+              opacity : 1
+            }
+          })
+        }
         // console.log(fillArr)
         this.setState({
-          aver: com(fillArr).toFixed(0)
+          aver: relvalue / relArr.length
         })
         // relArr.push(Number( com(dataArr).toFixed(0)))
         //Number( com(fillArr).toFixed(0)))
@@ -883,9 +986,15 @@ export default class App extends React.Component {
 
           </TouchableHighlight>
           {/* <> */}
+          <View style={{ width: '100%', backgroundColor: '#ccc', height: 30, borderRadius: 15, position: 'relative',flexDirection : 'row' }}>
+            <View ref={(e) => this.slide = e} style={{ width: '33%', backgroundColor: 'green', height: 30, borderBottomLeftRadius: 15,borderTopLeftRadius : 15,  }}></View>
+            <View ref={(e) => this.slide1 = e} style={{ width: '34%', backgroundColor: '#f15929', height: 30  }}></View>
+            <View ref={(e) => this.slide2 = e} style={{ width: '33%', backgroundColor: 'red', height: 30, borderBottomRightRadius: 15, borderTopRightRadius : 15,  }}></View>
+          </View>
           < AppView option={this.state.option} arr={[this.state.arr]} />
-          < AppView option={this.state.option1} arr={[this.state.arr]} />
-          < AppView option={this.state.option2} arr={[this.state.arr]} />
+          {/* < AppView option={this.state.option1} arr={[this.state.arr]} /> */}
+          {/* < AppView option={this.state.option2} arr={[this.state.arr]} />   */}
+          {/* lubo */}
           < AppView option={this.state.option3} arr={[this.state.arr]} />
           <Text style={{ textAlign: 'center', width: '100%' }}>{parseInt(this.state.aver)}</Text>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', opacity: 0 }}>
