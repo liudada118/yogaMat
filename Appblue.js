@@ -53,7 +53,8 @@ export default class App extends React.Component {
       width5: 0,
       width6: 0,
       width7: 0,
-      text: ''
+      text: '',
+      value : ''
     };
     this.l1 = React.createRef();
     this.l2 = React.createRef();
@@ -294,6 +295,7 @@ export default class App extends React.Component {
       width5: valueArr[5] * (width - 20) / 1020,
       width6: valueArr[6] * (width - 20) / 1020,
       width7: valueArr[7] * (width - 20) / 1020,
+      value : valueArr
     })
     if (valueArr[6] > 100) {
       this.setState({
@@ -588,6 +590,7 @@ export default class App extends React.Component {
           <Text>Scan Bluetooth ({this.state.scanning ? 'on' : 'off'})</Text>
 
         </TouchableHighlight>
+        <Text style={{textAlign : 'center'}}>{this.state.value.toString()}</Text>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <View style={{ width: Width(240), height: Width(540) > height * 0.8 ? 0.8 * height : Width(540), borderWidth: 1, borderColor: '#f9d6f8' }}>
             <View ref={(e) => this.l8 = e} style={{ flex: 1, borderBottomWidth: 1, borderColor: '#f9d6f8', flexDirection: 'row', backgroundColor: 'rgb(36,4,49)', justifyContent: 'center', alignItems: 'center' }}>

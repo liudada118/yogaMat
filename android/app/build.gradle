@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.bodytaapp"
+        applicationId "com.yogamat"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
